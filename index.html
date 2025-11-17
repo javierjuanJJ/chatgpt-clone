@@ -5,14 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chat gpt local 100% privado gratis y maravilloso</title>
-    <!-- Incluir CSS (o estilos en línea aquí) -->
+    <style>
+        body {
+            font-family: System-ui;
+            /* Prioriza la fuente del sistema [12] */
+            background: #f0f0f0;
+            /* Gris claro [13] */
+            display: grid;
+            place-content: center;
+            height: 100dvh;
+            /* Altura dinámica del viewport (Dynamic View High) [13, 14] */
+        }
+
+        main {
+            width: 100%;
+            /* ... otros estilos de separación ... */
+            overflow: auto;
+            /* Muestra scroll si el contenido desborda [15] */
+        }
+    </style>
 </head>
 
 <body>
     <main>
         <ul class="lista de mensajes">
-            <!-- Ejemplo de mensaje del Bot -->
-            <!-- Se elimina más tarde, pero sirve de estructura inicial -->
+            <template id="message-template">
+                <!-- Este <li> se convierte en la clase .message [9] -->
+                <li>
+                    <span></span> <!-- Para el remitente (gpt o tú) [10] -->
+                    <p></p> <!-- Para el texto del mensaje (corregido desde el span original) [10, 11] -->
+                </li>
+            </template>
         </ul>
     </main>
 
@@ -22,6 +45,10 @@
         <button disabled>enviar</button>
         <!-- El botón se pone deshabilitado por defecto y se activa al cargar el modelo [5] -->
     </form>
+
+    <small></small>
+
+
 </body>
 
 </html>
