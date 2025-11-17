@@ -69,6 +69,35 @@
             background-color: green;
             /* Ejemplo de color [18] */
         }
+
+        form {
+            display: flex;
+        }
+
+        form input {
+            /* Usando el nested selector implícito */
+            border-radius: 9px;
+            flex-grow: 1;
+            /* Para que el input se expanda [20] */
+            border: 0;
+            padding: 8px;
+            margin: 8px;
+            /* ... Otros estilos ... */
+        }
+
+        form button {
+            background: black/* color */;
+            border: 0;
+            color: white;
+            cursor: Pointer;
+            /* ... otros estilos ... */
+        }
+
+        form button:hover {
+            /* Usando el ampersand (&) para referirse al padre (button) [21] */
+            background: green  /* slightly darker color */  ;
+            transition: background 0.3s;
+        }
     </style>
 </head>
 
