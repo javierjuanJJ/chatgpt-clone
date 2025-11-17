@@ -23,6 +23,37 @@
             overflow: auto;
             /* Muestra scroll si el contenido desborda [15] */
         }
+
+        .lista de mensajes {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            /* Quitar viñetas */
+            padding: 0;
+        }
+
+        /* Estilo para cada mensaje (Li) */
+        .message {
+            display: flex;
+            flex-direction: column;
+            margin: 0 0 16px 0;
+            /* Separación entre mensajes [16] */
+            padding: 8px 12px;
+        }
+
+        .message>span:first-child {
+            /* Estilos del remitente (GPT o tú) */
+            /* ... Sizing, centering, semi-bold font ... */
+            border-radius: 9999px;
+            /* Para que quede redondo [17] */
+            /* ... Background color, size ... */
+        }
+
+        .message p {
+            /* El párrafo que contiene el texto del mensaje [11] */
+            margin-top: 8px;
+            /* Separación con el remitente [17] */
+        }
     </style>
 </head>
 
