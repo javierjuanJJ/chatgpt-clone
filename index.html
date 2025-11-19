@@ -86,7 +86,9 @@
         }
 
         form button {
-            background: black/* color */;
+            background: black
+                /* color */
+            ;
             border: 0;
             color: white;
             cursor: Pointer;
@@ -95,7 +97,9 @@
 
         form button:hover {
             /* Usando el ampersand (&) para referirse al padre (button) [21] */
-            background: green  /* slightly darker color */  ;
+            background: green
+                /* slightly darker color */
+            ;
             transition: background 0.3s;
         }
     </style>
@@ -127,8 +131,8 @@
 </body>
 <script type="module">
     // Función de utilidad para seleccionar elementos (simulando jQuery) [24]
-    const $ = (selector) => document.querySelector(selector); 
-    
+    const $ = (selector) => document.querySelector(selector);
+
     // Variables de estado [5]
     let messages = [];
 
@@ -136,10 +140,54 @@
     const $form = $('form');
     const $input = $('input');
     const $template = $('#message-template');
-    const $messages = $('ul'); 
+    const $messages = $('ul');
     const $button = $('button');
-    const $small = $('small'); 
-    
+    const $small = $('small');
+
     // El resto del código JS sigue aquí...
+
+    $form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        $button.setAttribute('disabled', ''); // Deshabilita el botón mientras se procesa [28]
+
+        const messageText = $input.value.trim();
+        if (messageText !== '') {
+            // 1. Añadir mensaje de usuario a la lista y al DOM [29]
+            const userMessage = { role: 'user', content: messageText };
+            messages.push(userMessage);
+            addMessage({ text: messageText, sender: 'user' });
+
+            // 2. Procesar respuesta del Bot (Implementado en Capítulos 12/13)
+            // ...
+
+            // 3. Resetear input [27]
+            $input.value = '';
+        }
+    });
+
+    const addMessage = ({ text, sender }) => {
+        // Clonación profunda del template [30]
+        const cloneTemplate = $template.content.cloneNode(true);
+        const newMessage = cloneTemplate.querySelector('li'); // Recuperar el elemento message (li) [9]
+
+        // Recuperar elementos internos [10]
+        const $header = newMessage.querySelector('span');
+        const $text = newMessage.querySelector('p');
+
+        // Actualizar contenido y clase [10, 31]
+        $header.textContent = sender === 'Bot' ? 'gpt' : 'tú';
+        $text.textContent = text;
+        newMessage.classList.add(sender);
+
+        // Añadir al DOM y gestionar scroll [31-33]
+        $messages.appendChild(newMessage);
+        $messages.scrollTop = $messages.scrollHeight;
+
+        return $text; // Retorna el elemento P para el streaming [34]
+    };
+
+// CSS adicional para scroll suave: scroll-behavior: Smooth; (aplicado al contenedor de mensajes) [33]
+
 </script>
+
 </html>
