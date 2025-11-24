@@ -162,6 +162,33 @@
 
             // 3. Resetear input [27]
             $input.value = '';
+
+            // Llamada al motor LLM para obtener la respuesta en streaming [44, 45]
+            const chunks = await engine.chat.completions.create({
+                messages: messages,
+                stream: true
+            });
+
+            let reply = '';
+            // 1. Añadir un mensaje Bot vacío y obtener su elemento P para actualizarlo [34, 46]
+            const $botMessageText = addMessage({ text: '', sender: 'Bot' });
+
+            // 2. Iterar sobre los chunks de la respuesta [45]
+            for await (const chunk of chunks) {
+                const choice = chunk.choices;
+                // Recuperar el contenido, usando optional chaining y nullish coalescing [46, 47]
+                const content = choice.delta?.content ?? '';
+
+                reply += content;
+                $botMessageText.textContent = reply; // Actualizar el DOM en tiempo real [34]
+                $messages.scrollTop = $messages.scrollHeight; // Mantener el scroll al fondo [33, 48]
+            }
+
+            // 3. Guardar la respuesta completa del Bot en la historia [49]
+            messages.push({ role: 'assistant', content: reply });
+
+            // 4. Re-activar el botón [28]
+            $button.removeAttribute('disabled');
         }
     });
 
@@ -186,7 +213,32 @@
         return $text; // Retorna el elemento P para el streaming [34]
     };
 
-// CSS adicional para scroll suave: scroll-behavior: Smooth; (aplicado al contenedor de mensajes) [33]
+    // CSS adicional para scroll suave: scroll-behavior: Smooth; (aplicado al contenedor de mensajes) [33]
+
+    // Importación de la librería (la URL específica puede variar, pero se utiliza el import de módulos) [38, 39]
+    import { createWebWorkerEngine } from 'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.49/dist/web-llm.js';
+
+    // Modelo seleccionado (Ejemplo de Llama 3) [40, 41]
+    const selectedModel = 'Llama-3-8B-Instruct-q4f32_1-MLC';
+
+    // Configuración del Worker [37]
+    const worker = new Worker('worker.js', { type: 'module' }); // Debe ser tipo 'module' para imports internos
+
+    // Inicialización del motor LLM a través del Web Worker (Asíncrono) [36, 37]
+    const engine = await createWebWorkerEngine(worker, selectedModel, {
+        initProgressCallback: (info) => {
+            // Muestra progreso de carga en el elemento small [25, 42]
+            $small.textContent = info.text;
+
+            // Activa el botón al terminar la carga [5]
+            if (info.progress === 1) {
+                $button.removeAttribute('disabled');
+            }
+        }
+    });
+
+
+
 
 </script>
 
