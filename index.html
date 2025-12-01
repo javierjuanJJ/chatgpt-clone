@@ -2,244 +2,301 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chat gpt local 100% privado gratis y maravilloso</title>
-    <style>
-        body {
-            font-family: System-ui;
-            /* Prioriza la fuente del sistema [12] */
-            background: #f0f0f0;
-            /* Gris claro [13] */
-            display: grid;
-            place-content: center;
-            height: 100dvh;
-            /* Altura dinámica del viewport (Dynamic View High) [13, 14] */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT Local 100% privado, gratis y maravilloso</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f0f0f0;
+      display: grid;
+      place-content: center;
+      height: 100dvh;
+    }
+
+    main {
+      width: 400px;
+      max-width: 100%;
+      height: 70vh;
+
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 8px;
+      margin-bottom: 16px;
+
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      padding: 0;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      margin: 4px 0;
+      padding: 4px 8px;
+
+      span {
+        width: 36px;
+        height: 36px;
+        background: #eee;
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999999px;
+      }
+
+      p {
+        border-radius: 4px;
+        padding: 4px 8px;
+        margin-top: 4px;
+      }
+
+      &.user {
+        align-self: flex-end;
+        align-items: flex-end;
+
+        span,
+        p {
+          background: rgb(219, 236, 255);
+        }
+      }
+
+      &.bot {
+        align-self: flex-start;
+
+        span,
+        p {
+          background: rgb(198, 255, 220);
+        }
+      }
+    }
+
+    form {
+      display: flex;
+
+      input {
+        border-radius: 999999px;
+        flex-grow: 1;
+        border: 0;
+        padding: 8px;
+        margin-right: 8px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background: #09f;
+        border: 0;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        padding: 8px;
+        transition: background .3s ease;
+
+        &[disabled] {
+          background: #ccc;
+          opacity: .6;
+          pointer-events: none;
         }
 
-        main {
-            width: 100%;
-            /* ... otros estilos de separación ... */
-            overflow: auto;
-            /* Muestra scroll si el contenido desborda [15] */
+        &:hover {
+          background: rgb(0, 104, 173);
         }
+      }
+    }
 
-        .lista de mensajes {
-            display: flex;
-            flex-direction: column;
-            list-style: none;
-            /* Quitar viñetas */
-            padding: 0;
-        }
+    small {
+      font-size: 10px;
+      color: #555;
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 400px;
+    }
 
-        /* Estilo para cada mensaje (Li) */
-        .message {
-            display: flex;
-            flex-direction: column;
-            margin: 0 0 16px 0;
-            /* Separación entre mensajes [16] */
-            padding: 8px 12px;
-        }
+    .loading {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 50%;
 
-        .message>span:first-child {
-            /* Estilos del remitente (GPT o tú) */
-            /* ... Sizing, centering, semi-bold font ... */
-            border-radius: 9999px;
-            /* Para que quede redondo [17] */
-            /* ... Background color, size ... */
-        }
+      i {
+        pointer-events: none;
+        width: 2.5em;
+        height: 2.5em;
+        border: 0.4em solid transparent;
+        border-color: #eee;
+        border-top-color: #3E67EC;
+        border-radius: 50%;
+        animation: loadingspin 1s linear infinite;
+      }
 
-        .message p {
-            /* El párrafo que contiene el texto del mensaje [11] */
-            margin-top: 8px;
-            /* Separación con el remitente [17] */
-        }
+      h4 {
+        color: #444;
+        margin-bottom: 8px;
+      }
 
-        .user {
-            align-self: flex-end;
-            /* Alineación a la derecha [17] */
-            align-items: flex-end;
-            background-color: blue;
-            /* Ejemplo de color [18] */
-        }
+      h5 {
+        font-weight: 400;
+        margin: 0;
+        font-size: 10px;
+        opacity: .4;
+      }
+    }
 
-        .Bot {
-            align-self: flex-start;
-            /* Alineación a la izquierda [18] */
-            background-color: green;
-            /* Ejemplo de color [18] */
-        }
+    @keyframes loadingspin {
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
 
-        form {
-            display: flex;
-        }
+  <script type="module">
+    /* 
+    en el vídeo usamos "https://esm.run/@mlc-ai/web-llm"
+    el problema es que eso siempre es la versión más reciente
+    en el código usamos https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.46/+esm
+    para fijar la versión */
+    import { CreateWebWorkerMLCEngine } from "https://esm.run/@mlc-ai/web-llm"
 
-        form input {
-            /* Usando el nested selector implícito */
-            border-radius: 9px;
-            flex-grow: 1;
-            /* Para que el input se expanda [20] */
-            border: 0;
-            padding: 8px;
-            margin: 8px;
-            /* ... Otros estilos ... */
-        }
+    const $ = el => document.querySelector(el)
 
-        form button {
-            background: black
-                /* color */
-            ;
-            border: 0;
-            color: white;
-            cursor: Pointer;
-            /* ... otros estilos ... */
-        }
+    // pongo delante de la variable un símbolo de $
+    // para indicar que es un elemento del DOM
+    const $form = $('form')
+    const $input = $('input')
+    const $template = $('#message-template')
+    const $messages = $('ul')
+    const $container = $('main')
+    const $button = $('button')
+    const $info = $('small')
+    const $loading = $('.loading')
 
-        form button:hover {
-            /* Usando el ampersand (&) para referirse al padre (button) [21] */
-            background: green
-                /* slightly darker color */
-            ;
-            transition: background 0.3s;
+    let messages = []
+    let end = false
+
+    const SELECTED_MODEL = 'Llama-3-8B-Instruct-q4f32_1-MLC-1k'
+
+    const engine = await CreateWebWorkerMLCEngine(
+      new Worker('./worker.js', { type: 'module' }),
+      SELECTED_MODEL,
+      {
+        initProgressCallback: (info) => {
+          $info.textContent = info.text
+          if (info.progress === 1 && !end) {
+            end = true
+            $loading?.parentNode?.removeChild($loading)
+            $button.removeAttribute('disabled')
+            addMessage("¡Hola! Soy un ChatGPT que se ejecuta completamente en tu navegador. ¿En qué puedo ayudarte hoy?", 'bot')
+            $input.focus()
+          }
         }
-    </style>
+      }
+    )
+
+    $form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      const messageText = $input.value.trim()
+
+      if (messageText !== '') {
+        // añadimos el mensaje en el DOM
+        $input.value = ''
+      }
+
+      addMessage(messageText, 'user')
+      $button.setAttribute('disabled', '')
+
+      const userMessage = {
+        role: 'user',
+        content: messageText
+      }
+
+      messages.push(userMessage)
+
+      const chunks = await engine.chat.completions.create({
+        messages,
+        stream: true
+      })
+
+      let reply = ""
+
+      const $botMessage = addMessage("", 'bot')
+
+      for await (const chunk of chunks) {
+        const choice = chunk.choices[0]
+        const content = choice?.delta?.content ?? ""
+        reply += content
+        $botMessage.textContent = reply
+      }
+
+      $button.removeAttribute('disabled')
+      messages.push({
+        role: 'assistant',
+        content: reply
+      })
+      $container.scrollTop = $container.scrollHeight
+    })
+
+    function addMessage(text, sender) {
+      // clonar el template
+      const clonedTemplate = $template.content.cloneNode(true)
+      const $newMessage = clonedTemplate.querySelector('.message')
+
+      const $who = $newMessage.querySelector('span')
+      const $text = $newMessage.querySelector('p')
+
+      $text.textContent = text
+      $who.textContent = sender === 'bot' ? 'GPT' : 'Tú'
+      $newMessage.classList.add(sender)
+
+      $messages.appendChild($newMessage)
+
+      $container.scrollTop = $container.scrollHeight
+
+      return $text
+    }
+  </script>
 </head>
 
 <body>
-    <main>
-        <ul class="lista de mensajes">
-            <template id="message-template">
-                <!-- Este <li> se convierte en la clase .message [9] -->
-                <li>
-                    <span></span> <!-- Para el remitente (gpt o tú) [10] -->
-                    <p></p> <!-- Para el texto del mensaje (corregido desde el span original) [10, 11] -->
-                </li>
-            </template>
-        </ul>
-    </main>
+  <main>
+    <ul>
+      <li class="loading">
+        <i></i>
+        <h4>Cargando...</h4>
+        <h5>Esto puede tardar un poco. Paciencia.</h5>
+      </li>
+    </ul>
+  </main>
 
-    <form>
-        <!-- El type="text" es opcional/por defecto y se puede omitir -->
-        <input placeholder="Escribe tu mensaje aquí">
-        <button disabled>enviar</button>
-        <!-- El botón se pone deshabilitado por defecto y se activa al cargar el modelo [5] -->
-    </form>
+  <form>
+    <input placeholder="Escribe tu mensaje aquí...">
+    <button disabled>Enviar</button>
+  </form>
 
-    <small></small>
+  <small>&nbsp;</small>
 
-
+  <template id="message-template">
+    <li class="message">
+      <span></span>
+      <p></p>
+    </li>
+  </template>
 </body>
-<script type="module">
-    // Función de utilidad para seleccionar elementos (simulando jQuery) [24]
-    const $ = (selector) => document.querySelector(selector);
-
-    // Variables de estado [5]
-    let messages = [];
-
-    // Variables del DOM [24, 25]
-    const $form = $('form');
-    const $input = $('input');
-    const $template = $('#message-template');
-    const $messages = $('ul');
-    const $button = $('button');
-    const $small = $('small');
-
-    // El resto del código JS sigue aquí...
-
-    $form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        $button.setAttribute('disabled', ''); // Deshabilita el botón mientras se procesa [28]
-
-        const messageText = $input.value.trim();
-        if (messageText !== '') {
-            // 1. Añadir mensaje de usuario a la lista y al DOM [29]
-            const userMessage = { role: 'user', content: messageText };
-            messages.push(userMessage);
-            addMessage({ text: messageText, sender: 'user' });
-
-            // 2. Procesar respuesta del Bot (Implementado en Capítulos 12/13)
-            // ...
-
-            // 3. Resetear input [27]
-            $input.value = '';
-
-            // Llamada al motor LLM para obtener la respuesta en streaming [44, 45]
-            const chunks = await engine.chat.completions.create({
-                messages: messages,
-                stream: true
-            });
-
-            let reply = '';
-            // 1. Añadir un mensaje Bot vacío y obtener su elemento P para actualizarlo [34, 46]
-            const $botMessageText = addMessage({ text: '', sender: 'Bot' });
-
-            // 2. Iterar sobre los chunks de la respuesta [45]
-            for await (const chunk of chunks) {
-                const choice = chunk.choices;
-                // Recuperar el contenido, usando optional chaining y nullish coalescing [46, 47]
-                const content = choice.delta?.content ?? '';
-
-                reply += content;
-                $botMessageText.textContent = reply; // Actualizar el DOM en tiempo real [34]
-                $messages.scrollTop = $messages.scrollHeight; // Mantener el scroll al fondo [33, 48]
-            }
-
-            // 3. Guardar la respuesta completa del Bot en la historia [49]
-            messages.push({ role: 'assistant', content: reply });
-
-            // 4. Re-activar el botón [28]
-            $button.removeAttribute('disabled');
-        }
-    });
-
-    const addMessage = ({ text, sender }) => {
-        // Clonación profunda del template [30]
-        const cloneTemplate = $template.content.cloneNode(true);
-        const newMessage = cloneTemplate.querySelector('li'); // Recuperar el elemento message (li) [9]
-
-        // Recuperar elementos internos [10]
-        const $header = newMessage.querySelector('span');
-        const $text = newMessage.querySelector('p');
-
-        // Actualizar contenido y clase [10, 31]
-        $header.textContent = sender === 'Bot' ? 'gpt' : 'tú';
-        $text.textContent = text;
-        newMessage.classList.add(sender);
-
-        // Añadir al DOM y gestionar scroll [31-33]
-        $messages.appendChild(newMessage);
-        $messages.scrollTop = $messages.scrollHeight;
-
-        return $text; // Retorna el elemento P para el streaming [34]
-    };
-
-    // CSS adicional para scroll suave: scroll-behavior: Smooth; (aplicado al contenedor de mensajes) [33]
-
-    // Importación de la librería (la URL específica puede variar, pero se utiliza el import de módulos) [38, 39]
-    import { createWebWorkerEngine } from 'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.49/dist/web-llm.js';
-
-    // Modelo seleccionado (Ejemplo de Llama 3) [40, 41]
-    const selectedModel = 'Llama-3-8B-Instruct-q4f32_1-MLC';
-
-    // Configuración del Worker [37]
-    const worker = new Worker('worker.js', { type: 'module' }); // Debe ser tipo 'module' para imports internos
-
-    // Inicialización del motor LLM a través del Web Worker (Asíncrono) [36, 37]
-    const engine = await createWebWorkerEngine(worker, selectedModel, {
-        initProgressCallback: (info) => {
-            // Muestra progreso de carga en el elemento small [25, 42]
-            $small.textContent = info.text;
-
-            // Activa el botón al terminar la carga [5]
-            if (info.progress === 1) {
-                $button.removeAttribute('disabled');
-            }
-        }
-    });
-
-
-
-
-</script>
 
 </html>
